@@ -30,7 +30,7 @@ def load_vi_stopwords(patternpath, rootpath):
     return vi_stopwords
 
 def preprocessing(text):
-    """Return individual words after preprocessing"""
+    """Return individual words after preprocessing."""
     # Lowercase and Punctual Removal
     text = re.sub("[^\w\s\-]", " ", text).lower()
 
@@ -50,7 +50,7 @@ def preprocessing(text):
     return tokens
 
 def statistics(tokens):
-    """Return the number of occurrences of each word int the text"""
+    """Return the number of occurrences of each word int the text."""
     # Using the unigrams to count the number of occurrences of each word 
     unigrams = (pd.Series(nltk.ngrams(tokens, 1)))
 
@@ -80,9 +80,9 @@ def export_results(dataset, filename, rootpath):
     df.to_csv(fullpath, index=False, encoding='utf-8-sig')
 
 def visualize_results(dataset, filename, rootpath, top_n=10):
-    """Export the visualization results"""
+    """Visualize the top N most frequent words from the dataset and save the plot as an image file."""
 
-        # Create new directory if it exists
+    # Create new directory if it exists
     os.makedirs(rootpath, exist_ok=True)
     fullpath = os.path.join(rootpath, filename)
 
