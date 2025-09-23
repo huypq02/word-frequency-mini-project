@@ -62,11 +62,11 @@ def statistics(tokens):
     # Define a Dataframe from nwords Series;
     # count the number of occurrences of each word and reset index
     df = nwords.value_counts().reset_index()
-    df.columns = ['words', 'amount']
+    df.columns = ['words', 'counts']
 
     return df
 
-def export_data(dataset, filename, rootpath):
+def export_results(dataset, filename, rootpath):
     """Export DataFrame to CSV file in the specified directory."""
 
     # Create new directory if it exists
@@ -78,3 +78,23 @@ def export_data(dataset, filename, rootpath):
 
     # Use utf-8-sig to ensure proper encoding
     df.to_csv(fullpath, index=False, encoding='utf-8-sig')
+
+def visualize_results(dataset, filename, rootpath, top_n=10):
+    """Export the visualization results"""
+
+        # Create new directory if it exists
+    os.makedirs(rootpath, exist_ok=True)
+    fullpath = os.path.join(rootpath, filename)
+
+    # Declare the Dataframe from the dataset
+    df = pd.DataFrame(dataset)
+    top_words = df.head(top_n)
+
+    # Using matplotlib.pyplot to visualize the results 
+    plt.figure(figsize=(12,6))
+    plt.bar(top_words['words'], top_words['counts'])
+    plt.title(f'Top {top_n} Most Frequent Words')
+    plt.xlabel('Words')
+    plt.ylabel('Frequency')
+    plt.savefig(fullpath)
+    plt.show()
