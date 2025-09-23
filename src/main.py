@@ -11,7 +11,10 @@ def main():
     word_stats = ts.statistics(token)
 
     # Export to CSV
-    ts.export_data(word_stats, "word_frequency.csv", "output")
+    ts.export_results(word_stats, "word_frequency.csv", "output")
+
+    # Visualize the results
+    ts.visualize_results(word_stats, "word_frequency.png", "output")
 
 if __name__ == "__main__":
     main()
