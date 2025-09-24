@@ -50,7 +50,7 @@ def preprocessing(text):
     return tokens
 
 def statistics(tokens):
-    """Return the number of occurrences of each word int the text."""
+    """Return the number of occurrences of each word in the text."""
     # Using the unigrams to count the number of occurrences of each word 
     unigrams = (pd.Series(nltk.ngrams(tokens, 1)))
 
