@@ -2,7 +2,7 @@
 
 ## Objective
 
-Write a Python program that takes any text input, counts the frequency of each word, and outputs the results to the screen or saves them to a file.
+Write a Python program that takes any text input, preprocesses it (by removing punctuation, special characters, and stopwords) to extract meaningful words, counts the frequency of each word, and outputs the results to the screen or saves them to a file. The preprocessing step is essential to ensure accurate word frequency analysis by eliminating noise and focusing on significant terms.
 
 ## Detailed Requirements
 
