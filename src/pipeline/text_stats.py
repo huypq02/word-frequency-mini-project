@@ -77,7 +77,8 @@ def export_results(dataset, filename, rootpath):
     df = pd.DataFrame(dataset)
 
     # Use utf-8-sig to ensure proper encoding
-    df.to_csv(fullpath, index=False, encoding='utf-8-sig')
+    temp = df.to_csv(fullpath, index=False, encoding='utf-8-sig')
+    print(type(temp))
 
 def visualize_results(dataset, filename, rootpath, top_n=10):
     """Visualize the top N most frequent words from the dataset and save the plot as an image file."""
