@@ -7,7 +7,7 @@ app = FastAPI()
 @app.post("/analyze-text")
 async def analyze_text(request: TextStatsRequest):
     try:
-        # Validation input text
+        # Validate input text
         if request.text is None or request.text.strip() == "":
             return TextStatsResponse(status="error",
                                      message="Input text must not be empty or whitespace-only",
@@ -36,14 +36,18 @@ async def analyze_text(request: TextStatsRequest):
         raise
     except Exception as e:
         print(f"Error raised while analyzing the input text: {e}")
-        raise HTTPException(status_code=404, detail="Error while analyzing text.")
+        raise HTTPException(status_code=500, detail="Error while analyzing text.")
 
 @app.post("/analyze-file")
 async def analyze_file(file: UploadFile = File(...)):
     try:
         data = await file.read()
         text = data.decode("utf-8") # Convert bytes to string
-
+        # Validate input text
+        if text is None or text.strip() == "":
+            return TextStatsResponse(status="error",
+                                     message="Input text must not be empty or whitespace-only",
+                                     data={})
         # Preprocessing data
         token = ts.preprocessing(text=text)
         # Get word statistics
@@ -66,8 +70,9 @@ async def analyze_file(file: UploadFile = File(...)):
                                  data=word_stats.set_index('words').to_dict('dict'))
     except UnicodeDecodeError:
         print("The uploaded file could not be read.")
+        raise HTTPException(status_code=400, detail="The uploaded file could not be read.")
     except HTTPException:
         raise
     except Exception as e:
         print(f"Error raised while analyzing the input file: {e}")
-        raise HTTPException(status_code=404, detail="Error while analyzing file.")
+        raise HTTPException(status_code=500, detail="Error while analyzing file.")
