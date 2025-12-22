@@ -9,9 +9,7 @@ async def analyze_text(request: TextStatsRequest):
     try:
         # Validate input text
         if request.text is None or request.text.strip() == "":
-            return TextStatsResponse(status="error",
-                                     message="Input text must not be empty or whitespace-only",
-                                     data={})
+            raise HTTPException(status_code=400, details="Input text must not be empty or whitespace-only")
 
         # Preprocessing data
         token = ts.preprocessing(text=request.text)
@@ -20,14 +18,10 @@ async def analyze_text(request: TextStatsRequest):
 
         # Validate Dataframe structure
         if word_stats.empty:
-            return TextStatsResponse(status="error",
-                                     message="No words found after processing data",
-                                     data={})
+            raise HTTPException(status_code=500, details="No words found after processing data")
 
         if 'words' not in word_stats.columns:
-            return TextStatsResponse(status="error",
-                                     message="Invalid Dataframe structure",
-                                     data={})
+            raise HTTPException(status_code=500, details="Invalid Dataframe structure")
 
         return TextStatsResponse(status="success",
                                 message="Text analysis completed successfully",
@@ -44,10 +38,9 @@ async def analyze_file(file: UploadFile = File(...)):
         data = await file.read()
         text = data.decode("utf-8") # Convert bytes to string
         # Validate input text
-        if text is None or text.strip() == "":
-            return TextStatsResponse(status="error",
-                                     message="Input text must not be empty or whitespace-only",
-                                     data={})
+        if text.strip() == "":
+            raise HTTPException(status_code=400, details="Input text must not be empty or whitespace-only")
+
         # Preprocessing data
         token = ts.preprocessing(text=text)
         # Get word statistics
@@ -55,15 +48,10 @@ async def analyze_file(file: UploadFile = File(...)):
 
         # Validate Dataframe structure
         if word_stats.empty:
-            return TextStatsResponse(status="error",
-                                     message="No words found after processing data",
-                                     data={})
+            raise HTTPException(status_code=500, details="No words found after processing data")
 
         if 'words' not in word_stats.columns:
-            return TextStatsResponse(status="error",
-                                     message="Invalid Dataframe structure",
-                                     data={})
-
+            raise HTTPException(status_code=500, details="Invalid Dataframe structure")
 
         return TextStatsResponse(status="success",
                                  message="Text analysis completed successfully",
