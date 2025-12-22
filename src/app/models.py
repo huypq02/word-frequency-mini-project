@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-import pandas as pd
 
 class TextStatsRequest(BaseModel):
     text: str
