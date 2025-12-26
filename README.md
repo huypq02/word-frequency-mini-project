@@ -46,15 +46,8 @@ Xin chào! Đây là ví dụ về dự án nhỏ. Xin chào mọi người.
 'chào': 2
 'xin': 2
 'đây': 1
-'là': 1
 'ví': 1
 'dụ': 1
-'về': 1
-'dự': 1
-'án': 1
-'nhỏ': 1
-'mọi': 1
-'người': 1
 ```
 
 ## Final Requirement
@@ -142,7 +135,7 @@ Xin chào! Đây là ví dụ về dự án nhỏ. Xin chào mọi người.
 Output CSV:
 
 ```csv
-words,amount
+words,counts
 chào,2
 xin,2
 đây,1
