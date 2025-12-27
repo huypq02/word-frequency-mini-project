@@ -1,10 +1,12 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from pipeline import text_stats as ts
 from .models import TextStatsRequest, TextStatsResponse
+from .middleware import LimitUploadSize
 
 app = FastAPI()
+app.add_middleware(LimitUploadSize)  # Default: 5MB
 
-@app.post("/analyze-text")
+@app.post("/analyses/text")
 async def analyze_text(request: TextStatsRequest):
     try:
         # Validate input text
@@ -12,7 +14,7 @@ async def analyze_text(request: TextStatsRequest):
             raise HTTPException(status_code=400, detail="Input text must not be empty or whitespace-only")
 
         # Preprocessing data
-        token = ts.preprocessing(text=request.text)
+        token = ts.preprocessing(request.text)
         # Get word statistics
         word_stats = ts.statistics(token)
 
@@ -32,17 +34,17 @@ async def analyze_text(request: TextStatsRequest):
         print(f"Error raised while analyzing the input text: {e}")
         raise HTTPException(status_code=500, detail="Error while analyzing text.")
 
-@app.post("/analyze-file")
+@app.post("/analyses/file")
 async def analyze_file(file: UploadFile = File(...)):
     try:
         data = await file.read()
-        text = data.decode("utf-8") # Convert bytes to string
+        text = data.decode("utf-8")
         # Validate input text
         if text.strip() == "":
             raise HTTPException(status_code=400, detail="Input text must not be empty or whitespace-only")
 
         # Preprocessing data
-        token = ts.preprocessing(text=text)
+        token = ts.preprocessing(text)
         # Get word statistics
         word_stats = ts.statistics(token)
 
@@ -57,8 +59,8 @@ async def analyze_file(file: UploadFile = File(...)):
                                  message="Text analysis completed successfully",
                                  data=word_stats.set_index('words').to_dict('dict'))
     except UnicodeDecodeError:
-        print("The uploaded file could not be read.")
-        raise HTTPException(status_code=400, detail="The uploaded file could not be read.")
+        print(f"Failed to decode uploaded file '{file.filename}' as UTF-8 text.")
+        raise HTTPException(status_code=400, detail="The uploaded file must be UTF-8 encoded text.")
     except HTTPException:
         raise
     except Exception as e:
