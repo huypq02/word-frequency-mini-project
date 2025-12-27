@@ -6,7 +6,7 @@ from .middleware import LimitUploadSize
 app = FastAPI()
 app.add_middleware(LimitUploadSize)  # Default: 5MB
 
-@app.post("/analyses")
+@app.post("/analyses/text")
 async def analyze_text(request: TextStatsRequest):
     try:
         # Validate input text
@@ -34,7 +34,7 @@ async def analyze_text(request: TextStatsRequest):
         print(f"Error raised while analyzing the input text: {e}")
         raise HTTPException(status_code=500, detail="Error while analyzing text.")
 
-@app.post("/analyses/upload")
+@app.post("/analyses/file")
 async def analyze_file(file: UploadFile = File(...)):
     try:
         data = await file.read()
