@@ -1,10 +1,11 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from pipeline import text_stats as ts
 from .models import TextStatsRequest, TextStatsResponse
-from .middleware import LimitUploadSize
+from .middleware import LimitUploadSize, LimitUploadContentType
 
 app = FastAPI()
 app.add_middleware(LimitUploadSize)  # Default: 5MB
+app.add_middleware(LimitUploadContentType, allowed_content_type=['text/plain'])
 
 @app.post("/analyses/text")
 async def analyze_text(request: TextStatsRequest):
