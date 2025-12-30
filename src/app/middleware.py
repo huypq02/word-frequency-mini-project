@@ -50,7 +50,7 @@ class LimitUploadContentType(BaseHTTPMiddleware):
         try:
             body = await request.body()
             content_type = get_content_type_from_body(body)
-        except UnboundLocalError:
+        except UnboundLocalError: # TODO: should change the error properly
             print("Body request should not be None.")
             return Response(status_code=status.HTTP_400_BAD_REQUEST,
                             content='{"detail":"Body request should not be `None`."}',
