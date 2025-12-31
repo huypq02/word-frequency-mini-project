@@ -7,14 +7,11 @@ import re
 
 ALLOWED_METHODS = ['POST', 'PUT', 'PATCH']
 
-def get_content_type_from_body(body: bytes) -> str:
+def get_content_type_from_body(body: bytes) -> str | None:
     content_type_match = re.search(rb'Content-Type: ([^\r\n]+)', body)
-    if content_type_match is None:
-        print(f"The value of content_type_match is None or falsy: {content_type_match}")
-        return ""
     if content_type_match:
-        content_type = content_type_match.group(1).decode("utf-8")
-    return content_type
+        return content_type_match.group(1).decode("utf-8")
+    return None
 
 class LimitUploadSize(BaseHTTPMiddleware):
     def __init__(self, app: ASGIApp, max_upload_size: int = 5_000_000) -> None:
@@ -52,20 +49,20 @@ class LimitUploadContentType(BaseHTTPMiddleware):
         if request.method in ALLOWED_METHODS:
             try:
                 body = await request.body()
-                if not body or body is None or body == "":
+                if not body:
                     print(f"The body is empty or none: {body}")
                     return Response(status_code=status.HTTP_400_BAD_REQUEST,
                                     content='{"detail":"The body shouldn\'t be empty or none."}',
                                     media_type="application/json")
                 content_type = get_content_type_from_body(body)
-            except UnboundLocalError:
-                print("Undefined Content-Type from the body.")
-                return Response(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                                content='{"detail":"Content-Type from the body is not found."}',
-                                media_type="application/json")
             
-            if self.allowed_content_type is not None and content_type not in self.allowed_content_type:
-                return Response(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
-                                content='{"detail":"Uploaded file type is not allowed."}',
+                if self.allowed_content_type is not None and content_type not in self.allowed_content_type:
+                    return Response(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+                                    content='{"detail":"Uploaded file type is not allowed."}',
+                                    media_type="application/json")
+            except Exception as e:
+                print(f"Unexpected error: {e}")
+                return Response(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                content='{"detail":"Unexpected error."}',
                                 media_type="application/json")
         return await call_next(request)
