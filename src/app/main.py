@@ -5,7 +5,9 @@ from .middleware import LimitUploadSize, LimitUploadContentType
 
 app = FastAPI()
 app.add_middleware(LimitUploadSize)  # Default: 5MB
-app.add_middleware(LimitUploadContentType, allowed_content_type=['text/plain'])
+app.add_middleware(LimitUploadContentType,
+                   allowed_file_content_type=['text/plain'],
+                   allowed_content_type_header=['multipart/form-data'])
 
 @app.post("/analyses/text")
 async def analyze_text(request: TextStatsRequest):
