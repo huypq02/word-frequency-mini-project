@@ -96,5 +96,4 @@ def visualize_results(dataset, filename, rootpath, top_n=10):
     plt.title(f'Top {top_n} Most Frequent Words')
     plt.xlabel('Words')
     plt.ylabel('Frequency')
-    plt.savefig(fullpath, format='png')
-    plt.show()
+    plt.savefig(fullpath)
