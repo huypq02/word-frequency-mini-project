@@ -113,7 +113,7 @@ class LimitUploadContentType(BaseHTTPMiddleware):
                 content_type = content_type_header.split(';')[0].strip()
                 if self.allowed_content_type_header is not None and content_type not in self.allowed_content_type_header:
                     return Response(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
-                                    content='{"detail":"Uploaded file type is not allowed."}',
+                                    content='{"detail":"Content-Type header is not allowed."}',
                                     media_type="application/json")
                 
         return await call_next(request)
