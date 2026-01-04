@@ -1,10 +1,11 @@
+import uvicorn
 from fastapi import FastAPI, UploadFile, File, HTTPException, Form
+from fastapi.responses import FileResponse
 from typing import Annotated
-from fastapi.responses import StreamingResponse, FileResponse
-from pipeline import text_stats as ts
+import time, os
+from src.pipeline import text_stats as ts
 from .models import TextStatsRequest, TextStatsResponse
 from .middleware import LimitUploadSize, LimitUploadContentType
-import time, os
 
 app = FastAPI()
 app.add_middleware(LimitUploadSize)  # Default: 5MB
@@ -107,3 +108,8 @@ async def analyze_file(format: Annotated[str, Form()] = 'json', file: UploadFile
     except Exception as e:
         print(f"Error raised while analyzing the input file: {e}")
         raise HTTPException(status_code=500, detail="Error while analyzing file.")
+
+if __name__ == "__main__":
+    config = uvicorn.Config("src.app.main:app", port=5000, log_level="info")
+    server = uvicorn.Server(config)
+    server.run()
