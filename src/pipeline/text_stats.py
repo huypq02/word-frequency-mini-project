@@ -97,3 +97,4 @@ def visualize_results(dataset, filename, rootpath, top_n=10):
     plt.xlabel('Words')
     plt.ylabel('Frequency')
     plt.savefig(fullpath)
+    plt.close()
