@@ -73,7 +73,7 @@ jobs:
     name: Build Docker Image
     runs-on: ubuntu-latest
     # Only run on push to main/develop (not on PRs) to save costs
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' && github.ref == 'refs/heads/develop')
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     env:
       USERNAME: ${{ github.actor }}
       PASSWORD: ${{ secrets.GITHUB_TOKEN }}
