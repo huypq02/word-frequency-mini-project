@@ -110,6 +110,6 @@ async def analyze_file(format: Annotated[str, Form()] = 'json', file: UploadFile
         raise HTTPException(status_code=500, detail="Error while analyzing file.")
 
 if __name__ == "__main__":
-    config = uvicorn.Config("src.app.main:app", port=5000, log_level="info")
+    config = uvicorn.Config("src.app.main:app", host="0.0.0.0", port=5000, log_level="info")
     server = uvicorn.Server(config)
     server.run()
