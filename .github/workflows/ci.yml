@@ -102,7 +102,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: .
           push: true
           tags: ghcr.io/${{ env.USERNAME }}/${{ env.REPOS_NAME }}:latest
           # Enable caching to speed up builds and reduce costs

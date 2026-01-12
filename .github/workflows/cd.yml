@@ -1,0 +1,27 @@
+name: CD - Continuous Deployment
+run-name: CD triggered by ${{ github.action }}
+
+concurrency: production
+
+permissions:
+  contents: read
+
+on:
+  workflow_run:
+    workflows: ["CI - Tests & Quality Checks"]
+    types: [completed]
+    branches:
+      - main
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ vars.RENDER_APP_URL }}
+
+    steps:
+      - name: Deploy app on Render
+        env:
+          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: curl "$deploy_url"
