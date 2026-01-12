@@ -9,6 +9,6 @@ class TestTextStats(unittest.TestCase):
         with open(os.path.join(self.rootpath, self.filename), "w", encoding="utf-8") as f:
             f.write("Xin chào! Đây là ví dụ về dự án nhỏ. Xin chào mọi người.")
     
-    def test_import_date(self):
+    def test_import_data(self):
         data = ts.import_data(self.filename, self.rootpath)
         self.assertIsInstance(data, str)

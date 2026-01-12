@@ -32,7 +32,7 @@ def load_vi_stopwords(patternpath, rootpath):
 def preprocessing(text):
     """Return individual words after preprocessing."""
     # Lowercase and Punctual Removal
-    text = re.sub("[^\w\s\-]", " ", text).lower()
+    text = re.sub(r"[^\w\s\-]", " ", text).lower()
 
     # Stop word removal
     # English
