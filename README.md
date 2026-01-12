@@ -58,6 +58,83 @@ Xin chào! Đây là ví dụ về dự án nhỏ. Xin chào mọi người.
 
 ---
 
+## CI/CD Pipeline
+
+This project includes automated Continuous Integration and Continuous Deployment (CI/CD) workflows using GitHub Actions.
+
+### CI Pipeline (`.github/workflows/ci.yml`)
+
+**Triggers:** Push to `main` branch or `releases/**` branches
+
+**Workflow Steps:**
+
+1. **Run Linters**
+
+   - Python version: 3.13
+   - Tools: `black` (code formatter) and `flake8` (style checker)
+   - Ensures code quality and style consistency
+
+2. **Run Tests**
+
+   - Python versions tested: 3.9, 3.10, 3.11, 3.12, 3.13
+   - Runs all unit tests using `unittest`
+   - Generates code coverage reports using `coverage`
+   - Matrix strategy ensures compatibility across Python versions
+
+3. **Build Docker Image**
+   - Only runs on push to `main` branch
+   - Builds Docker image and pushes to GitHub Container Registry (ghcr.io)
+   - Supports multi-architecture builds (QEMU + Docker Buildx)
+
+### CD Pipeline (`.github/workflows/cd.yml`)
+
+**Triggers:** Successful completion of CI workflow on `main` branch
+
+**Workflow Steps:**
+
+1. **Deploy to Production**
+   - Environment: Production
+   - Deployment target: Render (via deploy hook)
+   - Requires `RENDER_DEPLOY_HOOK_URL` secret in repository settings
+
+### Running Tests Locally
+
+```bash
+# Run all tests
+python -m unittest discover tests
+
+# Run tests with coverage
+python -m coverage run -m unittest
+python -m coverage report -m
+
+# Run specific test file
+python -m unittest tests.test_text_stats
+
+# Run specific test case
+python -m unittest tests.test_text_stats.TestTextStats.test_import_data_returns_string
+```
+
+### CI/CD Requirements
+
+**GitHub Secrets Required:**
+
+- `RENDER_DEPLOY_HOOK_URL`: Render deployment webhook URL (for CD)
+
+**GitHub Variables Required:**
+
+- `RENDER_APP_URL`: Production application URL (for environment tracking)
+
+### Badge Status
+
+You can add these badges to track CI/CD status:
+
+```markdown
+![CI Status](https://github.com/YOUR_USERNAME/word-frequency-mini-project/workflows/CI%20-%20Tests%20&%20Quality%20Checks/badge.svg)
+![CD Status](https://github.com/YOUR_USERNAME/word-frequency-mini-project/workflows/CD%20-%20Continuous%20Deployment/badge.svg)
+```
+
+---
+
 ## 🚀 Getting Started - Quick Guide
 
 ### Step 1: Prerequisites
