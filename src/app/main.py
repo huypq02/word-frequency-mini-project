@@ -13,6 +13,9 @@ app.add_middleware(LimitUploadContentType,
                    allowed_file_content_type=['text/plain'],
                    allowed_content_type_header=['multipart/form-data', 'application/json'])
 
+# Ensure NLTK resources are available at startup
+ts.ensure_nltk_resources()
+
 @app.post("/analyses/text")
 async def analyze_text(request: TextStatsRequest):
     try:
