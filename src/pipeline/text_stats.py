@@ -8,6 +8,18 @@ import matplotlib.pyplot as plt
 import os
 import glob
 
+def ensure_nltk_resources():
+    try:
+        nltk.data.find("tokenizers/punkt")
+    except LookupError:
+        nltk.download("punkt")
+        nltk.download("punkt_tab")
+
+    try:
+        nltk.data.find("corpora/stopwords")
+    except LookupError:
+        nltk.download("stopwords")
+
 def import_data(filename, rootpath):
     """Load a text file from rootpath and return its contents as a DataFrame."""
     fullpath = os.path.join(rootpath, filename)
