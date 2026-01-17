@@ -1,8 +1,8 @@
 FROM python:3.13
 WORKDIR /usr/local/app
 
-# # Download NLTK data as root before switching to non-root user
-# RUN python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab'); nltk.download('stopwords')"
+# Download NLTK data as root before switching to non-root user
+RUN python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab'); nltk.download('stopwords')"
 
 # Install the application dependencies
 COPY requirements.txt ./
@@ -16,8 +16,8 @@ EXPOSE 5000
 RUN useradd app
 USER app
 
-# Set cache directories to /tmp to avoid permission issues
+# Set matplotlib and fontconfig cache directories to /tmp to avoid permission issues
 ENV MPLCONFIGDIR=/tmp/matplotlib
-ENV NLTK_DATA=/tmp/nltk_data
+ENV FONTCONFIG_PATH=/etc/fonts
 
 CMD [ "python", "-m", "src.app.main"]
