@@ -15,8 +15,8 @@ EXPOSE 5000
 RUN useradd app
 USER app
 
-# Set matplotlib and fontconfig cache directories to /tmp to avoid permission issues
+# Set cache directories to /tmp to avoid permission issues
 ENV MPLCONFIGDIR=/tmp/matplotlib
-ENV FONTCONFIG_PATH=/etc/fonts
+ENV XDG_CACHE_HOME=/tmp/.cache
 
 CMD [ "python", "-m", "src.app.main"]
