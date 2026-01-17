@@ -3,9 +3,11 @@ WORKDIR /usr/local/app
 
 # Install the application dependencies
 COPY requirements.txt ./
-# Download NLTK data as root before switching to non-root user
 RUN pip install --no-cache-dir -r requirements.txt && \
-    python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab'); nltk.download('stopwords')"
+    python -c "import nltk; \
+    nltk.download('punkt', download_dir='/usr/local/share/nltk_data'); \
+    nltk.download('punkt_tab', download_dir='/usr/local/share/nltk_data'); \
+    nltk.download('stopwords', download_dir='/usr/local/share/nltk_data')"
 
 # Copy in the source code
 COPY src ./src
@@ -18,5 +20,6 @@ USER app
 # Set cache directories to /tmp to avoid permission issues
 ENV MPLCONFIGDIR=/tmp/matplotlib
 ENV XDG_CACHE_HOME=/tmp/.cache
+ENV NLTK_DATA=/tmp/nltk_data
 
 CMD [ "python", "-m", "src.app.main"]
