@@ -1,12 +1,11 @@
 FROM python:3.13
 WORKDIR /usr/local/app
 
-# Download NLTK data as root before switching to non-root user
-RUN python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab'); nltk.download('stopwords')"
-
 # Install the application dependencies
 COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+# Download NLTK data as root before switching to non-root user
+RUN pip install --no-cache-dir -r requirements.txt && \
+    python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab'); nltk.download('stopwords')"
 
 # Copy in the source code
 COPY src ./src
