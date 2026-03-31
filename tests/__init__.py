@@ -3,6 +3,8 @@ Module to initialize the tests package
 Provides test imports for easier access.
 """
 
-__version__ = "2.1.0"
-__author__ = "Huy Pham"
-__email__ = "huypham0297@gmail.com"
+from src.config.constant import PROJECT_AUTHOR, PROJECT_EMAIL, PROJECT_VERSION
+
+__version__ = PROJECT_VERSION
+__author__ = PROJECT_AUTHOR
+__email__ = PROJECT_EMAIL
