@@ -20,6 +20,5 @@ USER app
 # Set cache directories to /tmp to avoid permission issues
 ENV MPLCONFIGDIR=/tmp/matplotlib
 ENV XDG_CACHE_HOME=/tmp/.cache
-ENV NLTK_DATA=/tmp/nltk_data
 
 CMD [ "python", "-m", "src.app.main"]

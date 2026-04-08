@@ -6,6 +6,8 @@ counts the frequency of each word, and outputs the results to the screen or save
 The preprocessing step is essential to ensure accurate word frequency analysis by eliminating noise and focusing on significant terms.
 """
 
-__version__ = "2.1.0"
-__author__ = "Huy Pham"
-__email__ = "huypham0297@gmail.com"
+from src.config.constant import PROJECT_AUTHOR, PROJECT_EMAIL, PROJECT_VERSION
+
+__version__ = PROJECT_VERSION
+__author__ = PROJECT_AUTHOR
+__email__ = PROJECT_EMAIL

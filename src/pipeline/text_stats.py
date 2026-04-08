@@ -1,12 +1,18 @@
 import re
 import pandas as pd
 import nltk
-from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import underthesea
 import matplotlib.pyplot as plt
 import os
 import glob
+from src.config.constant import (
+    COUNTS_COLUMN,
+    DATA_DIR,
+    DEFAULT_TOP_N_WORDS,
+    STOPWORDS_FILE_PATTERN,
+    WORDS_COLUMN,
+)
 
 def ensure_nltk_resources():
     try:
@@ -23,9 +29,9 @@ def ensure_nltk_resources():
 def import_data(filename, rootpath):
     """Load a text file from rootpath and return its contents as a DataFrame."""
     fullpath = os.path.join(rootpath, filename)
-    data = ''
+    data = ""
     if os.path.exists(fullpath):
-        with open(fullpath, encoding='utf-8') as f:
+        with open(fullpath, encoding="utf-8") as f:
             data = f.read()
     return data
 
@@ -35,7 +41,7 @@ def load_vi_stopwords(patternpath, rootpath):
     for filepath in glob.glob(pathname=patternpath, root_dir=rootpath):
         fullpath = os.path.join(rootpath, filepath)
         if os.path.exists(fullpath):
-            with open(fullpath, encoding='utf-8') as f:
+            with open(fullpath, encoding="utf-8") as f:
                 vi_stopwords.extend([line.strip() for line in f if line.strip()])
         else:
             print(f"File not found: {filepath}")
@@ -48,10 +54,10 @@ def preprocessing(text):
 
     # Stop word removal
     # English
-    en_stopwords = stopwords.words('english')
+    en_stopwords = stopwords.words("english")
     # Vietnamese
-    rootpath = 'data'
-    pattern = '*stopwords.txt'
+    rootpath = DATA_DIR
+    pattern = STOPWORDS_FILE_PATTERN
     vi_stopwords = load_vi_stopwords(pattern, rootpath)
 
     # Both English and Vietnamese Tokenization
@@ -74,7 +80,7 @@ def statistics(tokens):
     # Define a Dataframe from nwords Series;
     # count the number of occurrences of each word and reset index
     df = nwords.value_counts().reset_index()
-    df.columns = ['words', 'counts']
+    df.columns = [WORDS_COLUMN, COUNTS_COLUMN]
 
     return df
 
@@ -89,9 +95,9 @@ def export_results(dataset, filename, rootpath):
     df = pd.DataFrame(dataset)
 
     # Use utf-8-sig to ensure proper encoding
-    df.to_csv(fullpath, index=False, encoding='utf-8-sig')
+    df.to_csv(fullpath, index=False, encoding="utf-8-sig")
 
-def visualize_results(dataset, filename, rootpath, top_n=10):
+def visualize_results(dataset, filename, rootpath, top_n=DEFAULT_TOP_N_WORDS):
     """Visualize the top N most frequent words from the dataset and save the plot as an image file."""
 
     # Create new directory if it exists
@@ -104,7 +110,7 @@ def visualize_results(dataset, filename, rootpath, top_n=10):
 
     # Using matplotlib.pyplot to visualize the results 
     plt.figure(figsize=(12,6))
-    plt.bar(top_words['words'], top_words['counts'])
+    plt.bar(top_words[WORDS_COLUMN], top_words[COUNTS_COLUMN])
     plt.title(f'Top {top_n} Most Frequent Words')
     plt.xlabel('Words')
     plt.ylabel('Frequency')
