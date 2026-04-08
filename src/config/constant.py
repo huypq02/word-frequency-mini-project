@@ -2,7 +2,7 @@
 
 # Project metadata
 PROJECT_NAME = "NLP Word Frequency Mini Project"
-PROJECT_VERSION = "2.1.0"
+PROJECT_VERSION = "2.2.0"
 PROJECT_AUTHOR = "Huy Pham"
 PROJECT_EMAIL = "huypham0297@gmail.com"
 
