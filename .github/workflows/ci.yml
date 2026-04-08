@@ -74,13 +74,11 @@ jobs:
     runs-on: ubuntu-latest
     # Only run on push to main/develop (not on PRs) to save costs
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    env:
-      USERNAME: ${{ github.actor }}
-      PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-      REPOS_NAME: ${{ github.event.repository.name }}
 
     needs:
       - run-test
+
+    environment: production
 
     steps:
       - name: Checkout
@@ -89,8 +87,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4 # More information on this action can be found below in the 'AWS Credentials' section
         with:
-          role-to-assume: arn:aws:iam::123456789012:role/my-github-actions-role
-          aws-region: aws-region-1
+          role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
+          aws-region: ${{ vars.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr
